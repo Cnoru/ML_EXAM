@@ -89,3 +89,10 @@ class Model(nn.Module):
         return self.net(x)
 ~~~
 
+### Applying to ML-platform
+
+### Container image
+
+### Github path
+
+### Execution file
