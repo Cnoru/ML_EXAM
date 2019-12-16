@@ -88,11 +88,17 @@ class Model(nn.Module):
     def forward(self, x):
         return self.net(x)
 ~~~
-
+--------------------------------------------------------------------------------------------------------------------------------------
 ### Applying to ML-platform
-
+--------------------------------------------------------------------------------------------------------------------------------------
 ### Container image
+
+ubuntu16.04-python3.7-cuda9.2-cudnn7.6-pytorch1.3.0
 
 ### Github path
 
+git@github.sec.samsung.net:STAR/ML-Platform-examples.git
+
 ### Execution file
+
+pip3 install matplotlib --user && python3 inception.py
