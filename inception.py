@@ -119,10 +119,10 @@ for epoch in range(0, num_epochs):
     ml.log_param('epoch', (epoch+1))
     ml.log_param('num_epochs', num_epochs)
     test()
+    save_filename = 'inception_model'
+    save_path = ('/gpfs-volume/{} {}'.format(save_filename, epoch+1))
+    torch.save(model.state_dict(), save_path)
+    ml.log_file(save_path)
 
-save_filename = 'inception_model'
-save_path = ('/gpfs-volume/{}'.format(save_filename))
-torch.save(model.state_dict(), save_path)
-ml.log_file(save_path)
 
 ml.end_run()
