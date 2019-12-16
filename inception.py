@@ -10,12 +10,12 @@ import mltracker as ml
 
 
 batch_size = 64
-num_epochs = 100
+num_epochs = 30
 learning_rate = 0.01
 
-mnist_train = dset.MNIST('../input', train=True, download=True, transform=T.ToTensor())
+mnist_train = dset.MNIST('data', train=True, download=True, transform=T.ToTensor())
 loader_train = DataLoader(mnist_train, batch_size=batch_size, shuffle=True)
-mnist_test = dset.MNIST('../input', train=False, download=True, transform=T.ToTensor())
+mnist_test = dset.MNIST('data', train=False, download=True, transform=T.ToTensor())
 loader_test = DataLoader(mnist_test, batch_size=batch_size, shuffle=False)
 
 
@@ -109,8 +109,8 @@ def test():
     print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
         test_loss, correct, len(loader_test.dataset),
         100. * correct / len(loader_test.dataset)))
-    ml.log_metric('Recent loss', test_loss)
-    ml.log_metric('Accuracy', 100*correct/len(loader_test.dataset))
+    ml.log_metric('Recent loss', float(test_loss))
+    ml.log_metric('Accuracy', int(100*correct/len(loader_test.dataset)))
 
 ml.start_run(version='inception')
 
