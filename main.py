@@ -76,15 +76,9 @@ class Model(nn.Module):
     def forward(self, x):
         return self.net(x)	
 
-model = Model().cuda()
-if config.model_path != 'NONE':
-    model = torch.load(model_path)
-    model.eval()
+
     
-loss_fn = nn.CrossEntropyLoss()
-optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.5)
-    
-def train(epoch):
+def train(epoch, model):
     model.train()
     for batch_idx, (data, target) in enumerate(loader_train):
         optimizer.zero_grad()
@@ -97,7 +91,7 @@ def train(epoch):
                 epoch, batch_idx * len(data), len(loader_train.dataset),
                 100. * batch_idx / len(loader_train), loss))
 
-def test():
+def test(model):
     model.eval()
     test_loss = 0
     correct = 0
@@ -117,14 +111,20 @@ def test():
     ml.log_metric('Accuracy', int(100*correct/len(loader_test.dataset)))
 
 def main(config):
-
+    model = Model().cuda()
+    if config.model_path != 'NONE':
+        model = torch.load(model_path)
+        model.eval()
+    loss_fn = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.5)
+    
     ml.start_run(version='inception')
 
     for epoch in range(0, num_epochs):
-        train(epoch)
+        train(epoch, model)
         ml.log_param('epoch', (epoch+1))
         ml.log_param('num_epochs', num_epochs)
-        test()
+        test(model)
         save_path = ('/gpfs-volume/{}{}'.format(save_filename, epoch+1))
         torch.save(model.state_dict(), save_path)
         ml.log_file(save_path)
