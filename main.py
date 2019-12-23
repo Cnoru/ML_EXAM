@@ -124,7 +124,7 @@ def main(config):
         train(epoch, model, loss_fn, optimizer)
         ml.log_param('epoch', (epoch+1))
         ml.log_param('num_epochs', num_epochs)
-        test(model, optimizer)
+        test(model, loss_fn)
         save_path = ('/gpfs-volume/{}{}'.format(save_filename, epoch+1))
         torch.save(model.state_dict(), save_path)
         ml.log_file(save_path)
