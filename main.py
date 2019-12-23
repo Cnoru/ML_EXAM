@@ -7,7 +7,7 @@ import torchvision.datasets as dset
 import torchvision.transforms as T
 import matplotlib.pyplot as plt
 
-#import mltracker as ml
+import mltracker as ml
 
 
 
@@ -122,8 +122,8 @@ def main(config):
 
     for epoch in range(0, num_epochs):
         train(epoch)
-            ml.log_param('epoch', (epoch+1))
-            ml.log_param('num_epochs', num_epochs)
+        ml.log_param('epoch', (epoch+1))
+        ml.log_param('num_epochs', num_epochs)
         test()
         save_path = ('/gpfs-volume/{}{}'.format(save_filename, epoch+1))
         torch.save(model.state_dict(), save_path)
