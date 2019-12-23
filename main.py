@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 batch_size = 64
 num_epochs = 30
 learning_rate = 0.01
+save_filename = 'inception_model'
 
 mnist_train = dset.MNIST('data', train=True, download=True, transform=T.ToTensor())
 loader_train = DataLoader(mnist_train, batch_size=batch_size, shuffle=True)
@@ -104,8 +105,8 @@ def test():
     print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
         test_loss, correct, len(loader_test.dataset),
         100. * correct / len(loader_test.dataset)))
-#    ml.log_metric('Recent loss', float(test_loss))
-#    ml.log_metric('Accuracy', int(100*correct/len(loader_test.dataset)))
+    ml.log_metric('Recent loss', float(test_loss))
+    ml.log_metric('Accuracy', int(100*correct/len(loader_test.dataset)))
 
 def main(config):
     if config.model_path == 'NONE':
@@ -117,20 +118,18 @@ def main(config):
     loss_fn = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.5)
 
-    #ml.start_run(version='inception')
+    ml.start_run(version='inception')
 
     for epoch in range(0, num_epochs):
         train(epoch)
-        #    ml.log_param('epoch', (epoch+1))
-        #    ml.log_param('num_epochs', num_epochs)
+            ml.log_param('epoch', (epoch+1))
+            ml.log_param('num_epochs', num_epochs)
         test()
-
-    save_filename = 'inception_model'
-    save_path = ('/gpfs-volume/{}'.format(save_filename))
-    torch.save(model.state_dict(), save_path)
-    #ml.log_file(save_path)
-
-    #ml.end_run()
+        save_path = ('/gpfs-volume/{}{}'.format(save_filename, epoch+1))
+        torch.save(model.state_dict(), save_path)
+        ml.log_file(save_path)
+        
+    ml.end_run()
 
 
 if __name__ == '__main__':
