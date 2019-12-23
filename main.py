@@ -78,7 +78,7 @@ class Model(nn.Module):
 
 
     
-def train(epoch, model):
+def train(epoch, model, loss_fn, optimizer):
     model.train()
     for batch_idx, (data, target) in enumerate(loader_train):
         optimizer.zero_grad()
@@ -91,7 +91,7 @@ def train(epoch, model):
                 epoch, batch_idx * len(data), len(loader_train.dataset),
                 100. * batch_idx / len(loader_train), loss))
 
-def test(model):
+def test(model, loss_fn):
     model.eval()
     test_loss = 0
     correct = 0
@@ -121,10 +121,10 @@ def main(config):
     ml.start_run(version='inception')
 
     for epoch in range(0, num_epochs):
-        train(epoch, model)
+        train(epoch, model, loss_fn, optimizer)
         ml.log_param('epoch', (epoch+1))
         ml.log_param('num_epochs', num_epochs)
-        test(model)
+        test(model, optimizer)
         save_path = ('/gpfs-volume/{}{}'.format(save_filename, epoch+1))
         torch.save(model.state_dict(), save_path)
         ml.log_file(save_path)
