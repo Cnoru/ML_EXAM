@@ -109,9 +109,8 @@ def test():
     ml.log_metric('Accuracy', int(100*correct/len(loader_test.dataset)))
 
 def main(config):
-    if config.model_path == 'NONE':
-        model = Model().cuda()
-    else:
+    model = Model().cuda()
+    if config.model_path != 'NONE':
         model = torch.load(model_path)
         model.eval()
 
