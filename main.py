@@ -76,6 +76,8 @@ class Model(nn.Module):
     def forward(self, x):
         return self.net(x)	
 
+model = Model().cuda()
+    
 def train(epoch):
     model.train()
     for batch_idx, (data, target) in enumerate(loader_train):
@@ -109,7 +111,6 @@ def test():
     ml.log_metric('Accuracy', int(100*correct/len(loader_test.dataset)))
 
 def main(config):
-    model = Model().cuda()
     if config.model_path != 'NONE':
         model = torch.load(model_path)
         model.eval()
