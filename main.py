@@ -113,7 +113,7 @@ def test(model, loss_fn):
 def main(config):
     model = Model().cuda()
     if config.model_path != 'NONE':
-        model = torch.load(model_path)
+        model = torch.load(config.model_path)
         model.eval()
     loss_fn = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.5)
