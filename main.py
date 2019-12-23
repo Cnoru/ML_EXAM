@@ -77,6 +77,12 @@ class Model(nn.Module):
         return self.net(x)	
 
 model = Model().cuda()
+if config.model_path != 'NONE':
+    model = torch.load(model_path)
+    model.eval()
+    
+loss_fn = nn.CrossEntropyLoss()
+optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.5)
     
 def train(epoch):
     model.train()
@@ -111,12 +117,6 @@ def test():
     ml.log_metric('Accuracy', int(100*correct/len(loader_test.dataset)))
 
 def main(config):
-    if config.model_path != 'NONE':
-        model = torch.load(model_path)
-        model.eval()
-
-    loss_fn = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.5)
 
     ml.start_run(version='inception')
 
